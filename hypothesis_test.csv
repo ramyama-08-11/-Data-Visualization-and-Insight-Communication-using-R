@@ -1,0 +1,2 @@
+"test","estimate_B","estimate_M","difference_M_minus_B","confidence_low","confidence_high","p_value"
+"Welch two-sample t-test: mean concave points, M versus B",0.0261077543859649,0.0883981065088757,0.0622903521229108,0.056624028136503,0.0679566761093187,1.05764271486446e-55

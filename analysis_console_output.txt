@@ -1,0 +1,114 @@
+UCI WDBC analysis; R 4.6.1 
+Rows: 569 | training: 454 | holdout: 115 
+Class counts (B, M):
+
+  B   M 
+357 212 
+
+Training summary statistics:
+             feature   n     mean      sd   median       q1       q3     min     max
+         radius_mean 454 14.08460 3.57185 13.28000 11.67750 15.74500 6.98100 28.1100
+        texture_mean 454 19.39097 4.41655 18.88000 16.23750 21.86250 9.71000 39.2800
+     smoothness_mean 454  0.09673 0.01404  0.09662  0.08675  0.10537 0.05263  0.1634
+ concave_points_mean 454  0.04930 0.03920  0.03460  0.02045  0.07463 0.00000  0.2012
+
+Welch hypothesis test:
+
+	Welch Two Sample t-test
+
+data:  concave_points_mean by diagnosis
+t = -21.67, df = 212.32, p-value < 2.2e-16
+alternative hypothesis: true difference in means between group B and group M is not equal to 0
+95 percent confidence interval:
+ -0.06795668 -0.05662403
+sample estimates:
+mean in group B mean in group M 
+     0.02610775      0.08839811 
+
+
+Shapiro-Wilk tests (exploratory):
+ group statistic   p_value
+     B    0.9467 1.180e-08
+     M    0.9607 1.074e-04
+
+Candidate-predictor correlations:
+       feature_1           feature_2 pearson_r  pearson_p spearman_rho spearman_p
+     radius_mean        texture_mean   0.31493  6.539e-12       0.3402  9.129e-14
+     radius_mean     smoothness_mean   0.17381  1.981e-04       0.1394  2.910e-03
+     radius_mean concave_points_mean   0.82458 6.936e-114       0.7620  2.552e-87
+    texture_mean     smoothness_mean  -0.04956  2.920e-01      -0.0047  9.204e-01
+    texture_mean concave_points_mean   0.28071  1.147e-09       0.3076  2.101e-11
+ smoothness_mean concave_points_mean   0.54778  6.546e-37       0.5452  1.617e-36
+
+Variance inflation factors:
+        radius_mean        texture_mean     smoothness_mean concave_points_mean 
+              4.768               1.160               2.275               6.817 
+
+Repeated stratified 5-fold CV (5 repeats), mean and SD:
+            metric    mean      sd
+          accuracy 0.93479 0.02202
+       sensitivity 0.89704 0.06045
+       specificity 0.95719 0.03125
+         precision 0.92897 0.04659
+                F1 0.91054 0.03151
+ balanced_accuracy 0.92712 0.02693
+               AUC 0.98296 0.01026
+             Brier 0.05004 0.01361
+
+Final model:
+
+Call:
+glm(formula = model_formula, family = binomial(), data = training_data)
+
+Coefficients:
+                     Estimate Std. Error z value Pr(>|z|)    
+(Intercept)         -29.68219    5.42744  -5.469 4.53e-08 ***
+radius_mean           0.89885    0.19471   4.616 3.91e-06 ***
+texture_mean          0.34444    0.06405   5.378 7.54e-08 ***
+smoothness_mean      65.57925   28.10044   2.334   0.0196 *  
+concave_points_mean  66.92873   17.01665   3.933 8.38e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 599.41  on 453  degrees of freedom
+Residual deviance: 138.11  on 449  degrees of freedom
+AIC: 148.11
+
+Number of Fisher Scoring iterations: 8
+
+
+Independent holdout metrics (threshold 0.50):
+         accuracy       sensitivity       specificity         precision                F1 balanced_accuracy 
+          0.93913           0.93023           0.94444           0.90909           0.91954           0.93734 
+              AUC             Brier 
+          0.99354           0.03169 
+
+Holdout confusion matrix (rows=actual, columns=predicted):
+      predicted
+actual  B  M
+     B 68  4
+     M  3 40
+
+Session information:
+R version 4.6.1 (2026-06-24 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26200)
+
+Matrix products: default
+  LAPACK version 3.12.1
+
+locale:
+[1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: Asia/Calcutta
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_4.6.1
